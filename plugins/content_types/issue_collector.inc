@@ -13,8 +13,8 @@ $plugin = array(
   'edit form' => 'oa_jira_collector_edit_form',
   'render callback' => 'oa_jira_collector_render',
   'defaults' => array(
-    'token_title' => '',
-    'token_body' => '',
+    'caption' => '',
+    'collector' => '',
   ),
 );
 
@@ -26,24 +26,7 @@ function oa_jira_collector_render($subtype, $conf, $args, $context = NULL) {
 
   $block = new stdClass();
   $block->title = '';
-
-  $collector = $conf['collector'];
-
-  $output = '<script type="text/javascript"
-    src="' . $collector . '"></script>
-    <script type="text/javascript">window.ATL_JQ_PAGE_PROPS =  {
-	    "triggerFunction": function(showCollectorDialog) {
-		    //Requires that jQuery is available!
-		    jQuery("#myCustomTrigger").click(function(e) {
-			    e.preventDefault();
-			    showCollectorDialog();
-		});
-	}};</script>
-
-  <button id="myCustomTrigger" class="aui-button aui-button-primary" type="submit" name="confirm" value="Save" tabindex="101" data-tooltip="Submit a bug report">
-    <span class="trigger-text">Submit Feedback</span>
-  </button>';
-  $vars['collector'] = $collector;
+  $vars['collector'] = $conf['collector'];
   $vars['caption'] = !empty($conf['caption']) ? $conf['caption'] : t('Submit an issue');
   $block->content = theme('oa_jira_collector', $vars);
 
@@ -55,25 +38,16 @@ function oa_jira_collector_render($subtype, $conf, $args, $context = NULL) {
  */
 function oa_jira_collector_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
-  $form['override_title']['#access'] = FALSE;
-  $form['override_title_text']['#access'] = FALSE;
-  $form['token_title'] = array(
-    '#title' => t('Displayed Title'),
-    '#description' => t('Enter the title to be displayed, including any token references.'),
+  $form['caption'] = array(
+    '#title' => t('Button caption'),
     '#type' => 'textfield',
-    '#default_value' => $conf['token_title'],
+    '#default_value' => $conf['caption'],
   );
-  $form['token_body'] = array(
-    '#title' => t('Displayed Text'),
-    '#description' => t('Enter the full text to be displayed, including any token references.'),
-    '#type' => 'text_format',
-    '#format' => isset($conf['token_body']['format']) ? $conf['token_body']['format'] : 'panopoly_wysiwyg_text',
-    '#default_value' => isset($conf['token_body']['value']) ? $conf['token_body']['value'] : '',
-  );
-  $form['tokens'] = array(
-    '#theme' => 'token_tree',
-    '#token_types' => array('node'),
-    '#recursion_limit' => 2,
+  $form['collector'] = array(
+    '#title' => t('Collector data'),
+    '#description' => t('Paste the JIRA Collector code given from JIRA here.'),
+    '#type' => 'textarea',
+    '#default_value' => $conf['collector'],
   );
 
   return $form;

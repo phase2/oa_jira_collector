@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Provides hook implementations and functionality for oa_jira_collector.
+ */
+
+/**
+* Implements hook_theme()
+*/
+function oa_jira_collector_theme() {
+  $path = drupal_get_path('module', 'oa_jira_collector') . '/templates';
+  return array(
+    'oa_jira_collector' => array(
+    'template'  => 'oa-jira-collector',
+    'path' => $path,
+    ),
+  );
+}

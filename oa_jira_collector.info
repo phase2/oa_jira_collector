@@ -1,0 +1,3 @@
+name = JIRA Collector
+description = "Widget for a JIRA issue collector"
+core = 7.x
